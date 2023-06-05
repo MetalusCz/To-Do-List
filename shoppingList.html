@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>ToDo List</title>
+  </head>
+  <body>
+    <div class="container">
+        <div class="list">
+            <h1>Shopping List <img src="https://cdn-icons-png.flaticon.com/128/9717/9717679.png" alt=""></h1>
+
+            <div class="inputAdd">
+                <input type="text" id="inputBox" placeholder="Add next item">
+                <button onclick="addTask()">Add</button>
+            </div>
+
+            <ul id="itemList">
+                <li>Milk <span class="delete" onclick="removeTask(this)">Delete</span></li>
+                <li>Ham <span class="delete" onclick="removeTask(this)">Delete</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+      function addTask() {
+        const inputBox = document.getElementById("inputBox");
+        const itemList = document.getElementById("itemList");
+        const taskText = inputBox.value.trim();
+
+        if (taskText === "") {
+          alert("Input cannot be empty");
+        }
+        else{  
+          const li = document.createElement("li");
+          li.innerHTML = `${taskText} <span class="delete" onclick="removeTask(this)">Delete</span>`;
+
+          itemList.appendChild(li);
+        }
+        inputBox.value = "";
+        saveData();
+      }
+
+      function removeTask(element) {
+        const taskItem = element.parentNode;
+        taskItem.parentNode.removeChild(taskItem);
+        saveData();
+      }
+
+      function saveData(){
+        localStorage.setItem("data", itemList.innerHTML);
+      }
+
+      function showItems(){
+        itemList.innerHTML = localStorage.getItem("data");
+      }
+      showItems();
+
+    </script>
+  </body>
+</html>

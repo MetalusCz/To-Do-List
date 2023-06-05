@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>ToDo List</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <div class="list">
+          <h1>Shopping List <img src="https://cdn-icons-png.flaticon.com/128/9717/9717679.png" alt=""></h1>
+
+          <div class="inputAdd">
+            <input type="text" v-model="taskText" placeholder="Add next item">
+            <button v-on:click="addTask">Add</button>
+          </div>
+
+          <ul>
+            <li v-for="(task, index) in tasks" :key="index">
+              {{ task }}
+              <span class="delete" v-on:click="removeTask(index)">Delete</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          taskText: '',
+          tasks: ['Milk', 'Ham']
+        },
+        methods: {
+          addTask() {
+            if (this.taskText.trim() === '') {
+              alert('Input cannot be empty');
+              return;
+            }
+            this.tasks.push(this.taskText.trim());
+            this.taskText = '';
+            this.saveData();
+          },
+          removeTask(index) {
+            this.tasks.splice(index, 1);
+            this.saveData();
+          },
+          saveData() {
+            localStorage.setItem('tasks', JSON.stringify(this.tasks));
+          },
+          showItems() {
+            const savedTasks = localStorage.getItem('tasks');
+            if (savedTasks) {
+              this.tasks = JSON.parse(savedTasks);
+            }
+          }
+        },
+        mounted() {
+          this.showItems();
+        }
+      });
+    </script>
+  </body>
+</html>
